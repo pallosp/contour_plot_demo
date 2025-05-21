@@ -37,7 +37,6 @@ export function PixelSizeInput(props: {
         size = props.pixelSizeExponent;
       }
       props.setPixelSizeExponent(size);
-      this.forceUpdate();
     };
   });
 
