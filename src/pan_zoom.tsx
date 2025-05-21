@@ -20,7 +20,7 @@ export class PanZoom extends Component<Props, State> {
   private readonly rootElement = createRef();
   private resizeObserver = new ResizeObserver(() => this.onResize());
 
-  private readonly mouseMoveListener = (e: Event) => this.onMouseMove(e as MouseEvent);
+  private readonly mouseMoveListener = (e: MouseEvent) => this.onMouseMove(e);
   private readonly mouseUpListener = () => this.onMouseUp();
 
   constructor(props: Props) {
@@ -56,7 +56,7 @@ export class PanZoom extends Component<Props, State> {
   }
 
   private onMouseDown(e: MouseEvent) {
-    e.preventDefault();  // prevent text selection while dragging
+    e.preventDefault(); // prevent text selection while dragging
     this.setState({lastX: e.x, lastY: e.y, panning: true});
     window.addEventListener('mousemove', this.mouseMoveListener);
     window.addEventListener('mouseup', this.mouseUpListener);
