@@ -4,7 +4,7 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "prepare": "cd .. && husky contour_plot_demo/.husky",
+    "prepare": "husky",
     "preview": "vite preview"
   },
   "prettier": {
