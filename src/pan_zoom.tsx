@@ -4,7 +4,12 @@ import {createPortal, ReactNode} from 'preact/compat';
 interface Props {
   initialZoom: number;
   className?: string;
-  children: (state: {offsetX: number; offsetY: number; volatile: boolean}) => ReactNode;
+  children: (state: {
+    offsetX: number;
+    offsetY: number;
+    zoom: number;
+    volatile: boolean;
+  }) => ReactNode;
 }
 
 interface State {
@@ -37,11 +42,11 @@ export class PanZoom extends Component<Props, State> {
 
   override render(
     {className, children}: Props,
-    {offsetX, offsetY, panning}: State
+    {offsetX, offsetY, zoom, panning}: State
   ): ComponentChildren {
     return (
       <div ref={this.rootElement} class={className} onMouseDown={(e) => this.onMouseDown(e)}>
-        {children({offsetX, offsetY, volatile: panning})}
+        {children({offsetX, offsetY, zoom, volatile: panning})}
         {panning &&
           createPortal(
             <div style={{position: 'absolute', width: '100vw', height: '100vh', cursor: 'grab'}} />,

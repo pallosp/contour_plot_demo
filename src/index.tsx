@@ -56,10 +56,11 @@ export function App() {
       </header>
       <main>
         <PanZoom key={plotIndex} className="svg-plot-wrapper" initialZoom={plotConfig.zoom}>
-          {({offsetX, offsetY, volatile}) => (
+          {({offsetX, offsetY, zoom, volatile}) => (
             <SvgPlot
               offsetX={offsetX}
               offsetY={offsetY}
+              zoom={zoom}
               volatile={volatile}
               config={plotConfig}
               showEdges={showEdges}

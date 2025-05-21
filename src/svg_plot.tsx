@@ -21,6 +21,7 @@ export interface Stats extends ComputeStats {
 interface Props {
   offsetX?: number;
   offsetY?: number;
+  zoom: number;
   volatile?: boolean;
   config: PlotConfig;
   showEdges: boolean;
@@ -33,16 +34,11 @@ export class SvgPlot extends Component<Props> {
   private svgRef = createRef<SVGSVGElement>();
   private computedDomain: Rect = new DOMRect();
 
-  private zoom(): number {
-    return this.props.config.zoom;
-  }
-
   private domain(): Rect {
     const el = this.svgRef.current;
-    const zoom = this.zoom();
+    const {offsetX, offsetY, zoom} = this.props;
     const width = (el?.clientWidth ?? 0) / zoom;
     const height = (el?.clientHeight ?? 0) / zoom;
-    const {offsetX, offsetY} = this.props;
     return {
       x: -width / 2 - (offsetX ?? 0) / zoom,
       y: -height / 2 - (offsetY ?? 0) / zoom,
@@ -52,7 +48,7 @@ export class SvgPlot extends Component<Props> {
   }
 
   private domainPixelSize(): number {
-    return this.props.viewportPixelSize / this.zoom();
+    return this.props.viewportPixelSize / roundDownToPow2(this.props.zoom);
   }
 
   override render(props: Props): ComponentChildren {
@@ -63,7 +59,7 @@ export class SvgPlot extends Component<Props> {
     return (
       <svg ref={this.svgRef} className={props.className}>
         {domain.width > 0 && (
-          <g transform={`scale(${this.zoom()}) translate(${-domain.x}, ${-domain.y})`}>
+          <g transform={`scale(${props.zoom}) translate(${-domain.x}, ${-domain.y})`}>
             <SvgPlotContent
               func={props.config.func}
               domain={this.computedDomain}
@@ -190,4 +186,8 @@ function containsRect(r1: Rect, r2: Rect) {
     r2.x + r2.width <= r1.x + r1.width &&
     r2.y + r2.height <= r1.y + r1.height
   );
+}
+
+function roundDownToPow2(x: number): number {
+  return 2 ** Math.floor(Math.log2(x));
 }
