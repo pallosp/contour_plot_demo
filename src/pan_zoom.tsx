@@ -56,6 +56,7 @@ export class PanZoom extends Component<Props, State> {
   }
 
   private onMouseDown(e: MouseEvent) {
+    e.preventDefault();  // prevent text selection while dragging
     this.setState({lastX: e.x, lastY: e.y, panning: true});
     window.addEventListener('mousemove', this.mouseMoveListener);
     window.addEventListener('mouseup', this.mouseUpListener);
