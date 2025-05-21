@@ -1,0 +1,52 @@
+body {
+  box-sizing: border-box;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 16px;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1ex 3ex;
+}
+
+main {
+  flex-grow: 1;
+  margin: 16px 0 8px 0;
+}
+
+.svg-plot-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.svg-plot {
+  border: 1px solid grey;
+  border-radius: 4px;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+}
+
+.stats-item {
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.line,
+.outside {
+  stroke: #f0f0f0;
+}
+
+.line-background,
+.perimeter {
+  stroke: royalblue;
+}
+
+.inside {
+  stroke: lightblue;
+}

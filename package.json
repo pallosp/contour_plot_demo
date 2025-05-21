@@ -1,0 +1,36 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "prepare": "cd .. && husky contour_plot_demo/.husky",
+    "preview": "vite preview"
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "none",
+    "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+    "importOrder": ["", "", "^[./]"]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.2.5",
+    "@mui/material": "^7.1.0",
+    "contour-plot-svg": "^2.0.3",
+    "preact": "^10.26.6"
+  },
+  "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
+    "@preact/preset-vite": "^2.10.1",
+    "eslint": "^9.27.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1",
+    "vite": "^6.3.5"
+  }
+}
