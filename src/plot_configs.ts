@@ -5,7 +5,7 @@ export function linePlot(): PlotConfig<boolean> {
   return {
     func: randomLines(),
     sampleSpacing: 0.5,
-    zoom: 64,
+    initialZoom: 64,
     addStyles: (el, value) => {
       el.classList.add(value ? 'line' : 'line-background');
     }
@@ -17,7 +17,7 @@ export function circlePlot(): PlotConfig<number> {
   return {
     func: randomCircles(),
     sampleSpacing: 0.5,
-    zoom: 64,
+    initialZoom: 64,
     addStyles: (el, value) => {
       el.classList.add(classes[value + 1]);
     }
@@ -28,7 +28,7 @@ export function sinCosPlot(): PlotConfig<number> {
   return {
     func: sinCos,
     sampleSpacing: 1,
-    zoom: 64,
+    initialZoom: 64,
     addStyles: (el, value) => {
       el.style.stroke = '#' + ((value + 3) * 3).toString(16).repeat(3);
     }
@@ -39,7 +39,7 @@ export function mandelbrotPlot(): PlotConfig<number> {
   return {
     func: mandelbrot,
     sampleSpacing: 0.25,
-    zoom: 256,
+    initialZoom: 256,
     addStyles: (el, value) => {
       el.style.stroke = '#' + ((value % 6) * 3).toString(16).repeat(3);
     }

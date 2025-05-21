@@ -6,7 +6,7 @@ import {Function2D} from './functions';
 export interface PlotConfig<T = unknown> {
   func: Function2D<T>;
   sampleSpacing: number;
-  zoom: number;
+  initialZoom: number;
   addStyles: (el: SVGGraphicsElement, value: T) => void;
 }
 
