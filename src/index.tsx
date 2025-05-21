@@ -9,55 +9,13 @@ import {
 import {render} from 'preact';
 import {useEffect, useRef, useState} from 'preact/hooks';
 
-import {mandelbrot, randomCircles, randomLines, sinCos} from './functions';
+import {PanZoom} from './pan_zoom';
+import {circlePlot, linePlot, mandelbrotPlot, sinCosPlot} from './plot_configs';
 import {PlotStats} from './plot_stats';
 import {PlotConfig, Stats, SvgPlot} from './svg_plot';
 
 import '@fontsource/roboto/latin-400.css';
 import './style.css';
-
-import {PanZoom} from './pan_zoom';
-
-function linePlot(): PlotConfig<boolean> {
-  return {
-    func: randomLines(),
-    sampleSpacing: 0.5,
-    zoom: 64,
-    addStyles: (el, value) => el.classList.add(value ? 'line' : 'line-background')
-  };
-}
-
-function circlePlot(): PlotConfig<number> {
-  const classes = ['outside', 'perimeter', 'inside'];
-  return {
-    func: randomCircles(),
-    sampleSpacing: 0.5,
-    zoom: 64,
-    addStyles: (el, value) => el.classList.add(classes[value + 1])
-  };
-}
-
-function sinCosPlot(): PlotConfig<number> {
-  return {
-    func: sinCos,
-    sampleSpacing: 1,
-    zoom: 64,
-    addStyles: (el, value) => {
-      el.style.stroke = '#' + ((value + 3) * 3).toString(16).repeat(3);
-    }
-  };
-}
-
-function mandelbrotPlot(): PlotConfig<number> {
-  return {
-    func: mandelbrot,
-    sampleSpacing: 0.25,
-    zoom: 256,
-    addStyles: (el, value) => {
-      el.style.stroke = '#' + ((value % 6) * 3).toString(16).repeat(3);
-    }
-  };
-}
 
 export function App() {
   const [plotConfig, setPlotConfig] = useState<PlotConfig<unknown>>(linePlot());
