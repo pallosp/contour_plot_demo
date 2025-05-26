@@ -11,8 +11,15 @@ import {PlotConfig, Stats, SvgPlot} from './svg_plot';
 import '@fontsource/roboto/latin-400.css';
 import './style.css';
 
+const PLOT_TYPES: Array<[string, () => PlotConfig]> = [
+  ['Lines', linePlot],
+  ['Circles', circlePlot],
+  ['Mandelbrot set', mandelbrotPlot],
+  ['sin x + cos y', sinCosPlot]
+];
+
 export function App() {
-  const [plotConfig, setPlotConfig] = useState<PlotConfig<unknown>>(linePlot());
+  const [plotConfig, setPlotConfig] = useState<PlotConfig<unknown>>(PLOT_TYPES[0][1]());
   const [plotIndex, setPlotIndex] = useState(0);
   const [showEdges, setShowEdges] = useState(false);
   const [pixelSizeExponent, setPixelSizeExponent] = useState(devicePixelRatio > 1 ? -1 : 0);
@@ -27,26 +34,13 @@ export function App() {
     <>
       <header>
         <ButtonGroup variant="outlined" sx={{height: '36px'}}>
-          <FunctionButton
-            text="Lines"
-            selected={plotIndex === 0}
-            onclick={() => setPlot(0, linePlot())}
-          />
-          <FunctionButton
-            text="Circles"
-            selected={plotIndex === 1}
-            onclick={() => setPlot(1, circlePlot())}
-          />
-          <FunctionButton
-            text="Mandelbrot set"
-            selected={plotIndex === 2}
-            onclick={() => setPlot(2, mandelbrotPlot())}
-          />
-          <FunctionButton
-            text="sin x + cos y"
-            selected={plotIndex === 3}
-            onclick={() => setPlot(3, sinCosPlot())}
-          />
+          {PLOT_TYPES.map(([title, plotConfigFactory], index) => (
+            <FunctionButton
+              text={title}
+              selected={plotIndex === index}
+              onclick={() => setPlot(index, plotConfigFactory())}
+            />
+          ))}
         </ButtonGroup>
         <ShowEdgesCheckbox setShowEdges={setShowEdges} />
         <PixelSizeInput
