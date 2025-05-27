@@ -1,5 +1,6 @@
 import {ButtonGroup} from '@mui/material';
 import {render} from 'preact';
+import {LocationProvider, useLocation} from 'preact-iso';
 import {useState} from 'preact/hooks';
 
 import {FunctionButton, PixelSizeInput, ShowEdgesCheckbox} from './controls';
@@ -18,27 +19,27 @@ const PLOT_TYPES: Array<[string, () => PlotConfig]> = [
   ['sin x + cos y', sinCosPlot]
 ];
 
-export function App() {
-  const [plotConfig, setPlotConfig] = useState<PlotConfig<unknown>>(PLOT_TYPES[0][1]());
-  const [plotIndex, setPlotIndex] = useState(0);
+export function Page({plotIndex}: {plotIndex: number}) {
+  const {route} = useLocation();
   const [showEdges, setShowEdges] = useState(false);
   const [pixelSizeExponent, setPixelSizeExponent] = useState(devicePixelRatio > 1 ? -1 : 0);
-  const [stats, setStats] = useState<Stats | undefined>();
-
-  function setPlot(index: number, plotConfig: PlotConfig<unknown>) {
-    setPlotIndex(index);
-    setPlotConfig(plotConfig);
-  }
+  const [stats, setStats] = useState<Stats | undefined>(undefined);
+  const [plotConfig, setPlotConfig] = useState<PlotConfig<unknown>>(() =>
+    PLOT_TYPES[plotIndex][1]()
+  );
 
   return (
     <>
       <header>
         <ButtonGroup variant="outlined" sx={{height: '36px'}}>
-          {PLOT_TYPES.map(([title, plotConfigFactory], index) => (
+          {PLOT_TYPES.map(([title], index) => (
             <FunctionButton
               text={title}
               selected={plotIndex === index}
-              onclick={() => setPlot(index, plotConfigFactory())}
+              onclick={() => {
+                setPlotConfig(PLOT_TYPES[index][1]());
+                route(`${index}`);
+              }}
             />
           ))}
         </ButtonGroup>
@@ -60,7 +61,7 @@ export function App() {
               showEdges={showEdges}
               viewportPixelSize={2 ** pixelSizeExponent}
               className="svg-plot"
-              onUpdate={(s) => setStats(s)}
+              onUpdate={setStats}
             />
           )}
         </PanZoom>
@@ -72,4 +73,19 @@ export function App() {
   );
 }
 
-render(<App />, document.body);
+function App() {
+  const location = useLocation();
+  const plotIndex = +location.path.substring(1);
+  if (plotIndex in PLOT_TYPES) {
+    return <Page plotIndex={plotIndex} />;
+  } else {
+    location.route('/', true);
+  }
+}
+
+render(
+  <LocationProvider>
+    <App />
+  </LocationProvider>,
+  document.body
+);
