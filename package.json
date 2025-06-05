@@ -26,7 +26,7 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.2.5",
     "@mui/material": "^7.1.1",
-    "contour-plot-svg": "^2.0.3",
+    "contour-plot-svg": "^2.0.4",
     "preact": "^10.26.8",
     "preact-iso": "^2.9.1"
   },
