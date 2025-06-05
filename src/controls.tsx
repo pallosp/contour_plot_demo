@@ -30,7 +30,7 @@ export function PixelSizeInput(props: {
 }) {
   const inputRef = useRef<HTMLInputElement>();
   useEffect(() => {
-    const input = inputRef.current;
+    const input = inputRef.current!;
     input.onchange = () => {
       let size = +input.value;
       if (size < -2 || size > 9 || !Number.isInteger(size)) {

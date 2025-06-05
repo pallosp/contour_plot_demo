@@ -1,5 +1,7 @@
-import {Component, ComponentChildren, createRef} from 'preact';
-import {createPortal, ReactNode} from 'preact/compat';
+import {Component, createRef} from 'preact';
+import type {ComponentChildren} from 'preact';
+import {createPortal} from 'preact/compat';
+import type {ReactNode} from 'preact/compat';
 
 interface Props {
   initialZoom: number;

@@ -1,6 +1,6 @@
 import {Typography} from '@mui/material';
 
-import {Stats} from './svg_plot';
+import type {Stats} from './svg_plot';
 
 export function PlotStats(props: {stats: Stats | undefined}) {
   const stats = props.stats;

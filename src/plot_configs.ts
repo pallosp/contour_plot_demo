@@ -1,5 +1,5 @@
 import {mandelbrot, randomCircles, randomLines, sinCos} from './functions';
-import {PlotConfig} from './svg_plot';
+import type {PlotConfig} from './svg_plot';
 
 export function linePlot(): PlotConfig<boolean> {
   return {

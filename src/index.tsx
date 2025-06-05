@@ -7,12 +7,14 @@ import {FunctionButton, PixelSizeInput, ShowEdgesCheckbox} from './controls';
 import {PanZoom} from './pan_zoom';
 import {circlePlot, linePlot, mandelbrotPlot, sinCosPlot} from './plot_configs';
 import {PlotStats} from './plot_stats';
-import {PlotConfig, Stats, SvgPlot} from './svg_plot';
+import {SvgPlot} from './svg_plot';
+import type {PlotConfig, Stats} from './svg_plot';
 
 import '@fontsource/roboto/latin-400.css';
 import './style.css';
 
-const PLOT_TYPES: Array<[string, () => PlotConfig]> = [
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const PLOT_TYPES: Array<[string, () => PlotConfig<any>]> = [
   ['Lines', linePlot],
   ['Circles', circlePlot],
   ['Mandelbrot set', mandelbrotPlot],

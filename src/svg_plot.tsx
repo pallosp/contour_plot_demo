@@ -1,7 +1,9 @@
-import {ComputeStats, Plot, Rect, runsToSvg, squaresToSvg} from 'contour-plot-svg';
-import {Component, ComponentChildren, createRef} from 'preact';
+import {Plot, runsToSvg, squaresToSvg} from 'contour-plot-svg';
+import type {ComputeStats, Rect} from 'contour-plot-svg';
+import {Component, createRef} from 'preact';
+import type {ComponentChildren} from 'preact';
 
-import {Function2D} from './functions';
+import type {Function2D} from './functions';
 
 export interface PlotConfig<T = unknown> {
   func: Function2D<T>;
