@@ -28,8 +28,9 @@ export function PixelSizeInput(props: {
   pixelSizeExponent: number;
   setPixelSizeExponent: (size: number) => void;
 }) {
+  const {pixelSizeExponent, setPixelSizeExponent} = props;
   const inputRef = useRef<HTMLInputElement>(null);
-  const lastValidValue = useRef(props.pixelSizeExponent);
+  const lastValidValue = useRef(pixelSizeExponent);
 
   useEffect(() => {
     const input = inputRef.current!;
@@ -40,9 +41,9 @@ export function PixelSizeInput(props: {
       }
       input.value = size.toString();
       lastValidValue.current = size;
-      props.setPixelSizeExponent(size);
+      setPixelSizeExponent(size);
     };
-  }, []);
+  }, [setPixelSizeExponent]);
 
   return (
     <FormControlLabel

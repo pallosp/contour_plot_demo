@@ -87,15 +87,17 @@ export function Page(props: {plotIndex: number}) {
 
 function ValidatedPage() {
   const {plotIndex} = useParams();
-  if (!plotIndex || Object.keys(PLOT_TYPES).includes(plotIndex)) {
-    return <Page plotIndex={+(plotIndex ?? 0)} />;
-  }
-
-  // Redirect to the root if the plot index is invalid.
   const navigate = useNavigate();
+
+  const isValid = !plotIndex || Object.keys(PLOT_TYPES).includes(plotIndex);
+
   useEffect(() => {
-    navigate('/', {replace: true});
-  });
+    if (!isValid) {
+      navigate('/', {replace: true});
+    }
+  }, [isValid, navigate]);
+
+  return isValid && <Page plotIndex={+(plotIndex ?? 0)} />;
 }
 
 function App() {
