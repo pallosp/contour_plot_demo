@@ -2,3 +2,4 @@ set -o errexit
 
 npx tsc
 npx eslint
+npx vitest run
