@@ -1,7 +1,6 @@
 import {Plot, runsToSvg, squaresToSvg} from 'contour-plot-svg';
 import type {ComputeStats, Rect} from 'contour-plot-svg';
-import {Component, createRef} from 'preact';
-import type {ComponentChildren} from 'preact';
+import {Component, createRef} from 'react';
 
 import type {Function2D} from './functions';
 
@@ -53,7 +52,8 @@ export class SvgPlot extends Component<Props> {
     return this.props.viewportPixelSize / roundDownToPow2(this.props.zoom);
   }
 
-  override render(props: Props): ComponentChildren {
+  override render() {
+    const {props} = this;
     const domain = this.domain();
     if (!props.volatile) {
       this.computedDomain = domain;
@@ -95,14 +95,14 @@ interface ContentProps<T = unknown> {
 class SvgPlotContent extends Component<ContentProps> {
   private plot: Plot<unknown>;
 
-  private rootRef = createRef();
+  private rootRef = createRef<SVGGElement>();
 
   constructor(props: ContentProps) {
     super(props);
     this.plot = new Plot(props.func);
   }
 
-  override render(): ComponentChildren {
+  override render() {
     return <g ref={this.rootRef} />;
   }
 
@@ -151,7 +151,7 @@ class SvgPlotContent extends Component<ContentProps> {
       svgElements = runsToSvg(runs, addStyles);
     }
 
-    const content = this.rootRef.current;
+    const content = this.rootRef.current!;
     content.textContent = '';
     content.append(...svgElements);
 

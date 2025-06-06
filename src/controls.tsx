@@ -1,5 +1,5 @@
 import {Button, Checkbox, FormControlLabel, TextField, Typography} from '@mui/material';
-import {useEffect, useRef} from 'preact/hooks';
+import {useEffect, useRef} from 'react';
 
 export function FunctionButton(props: {text: string; selected: boolean; onclick: () => void}) {
   return (
@@ -28,17 +28,21 @@ export function PixelSizeInput(props: {
   pixelSizeExponent: number;
   setPixelSizeExponent: (size: number) => void;
 }) {
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const lastValidValue = useRef(props.pixelSizeExponent);
+
   useEffect(() => {
     const input = inputRef.current!;
     input.onchange = () => {
       let size = +input.value;
       if (size < -2 || size > 9 || !Number.isInteger(size)) {
-        size = props.pixelSizeExponent;
+        size = lastValidValue.current;
       }
+      input.value = size.toString();
+      lastValidValue.current = size;
       props.setPixelSizeExponent(size);
     };
-  });
+  }, []);
 
   return (
     <FormControlLabel
@@ -48,13 +52,13 @@ export function PixelSizeInput(props: {
         <TextField
           inputRef={inputRef}
           type="number"
-          value={props.pixelSizeExponent}
+          defaultValue={props.pixelSizeExponent}
           variant="outlined"
           slotProps={{htmlInput: {min: -2, max: 9, step: 1}}}
           sx={{'& .MuiInputBase-input': {height: '36px', boxSizing: 'border-box'}}}
         />
       }
       sx={{margin: 0}}
-    ></FormControlLabel>
+    />
   );
 }

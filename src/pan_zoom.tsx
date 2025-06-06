@@ -1,7 +1,6 @@
-import {Component, createRef} from 'preact';
-import type {ComponentChildren} from 'preact';
-import {createPortal} from 'preact/compat';
-import type {ReactNode} from 'preact/compat';
+import {Component, createRef} from 'react';
+import type {ReactNode} from 'react';
+import {createPortal} from 'react-dom';
 
 interface Props {
   initialZoom: number;
@@ -24,7 +23,7 @@ interface State {
 }
 
 export class PanZoom extends Component<Props, State> {
-  private readonly rootElement = createRef();
+  private readonly rootElement = createRef<HTMLDivElement>();
   private resizeObserver = new ResizeObserver(() => this.onResize());
 
   private readonly mouseMoveListener = (e: MouseEvent) => this.onMouseMove(e);
@@ -42,12 +41,11 @@ export class PanZoom extends Component<Props, State> {
     };
   }
 
-  override render(
-    {className, children}: Props,
-    {offsetX, offsetY, zoom, panning}: State
-  ): ComponentChildren {
+  override render() {
+    const {className, children} = this.props;
+    const {offsetX, offsetY, zoom, panning} = this.state;
     return (
-      <div ref={this.rootElement} class={className} onMouseDown={(e) => this.onMouseDown(e)}>
+      <div ref={this.rootElement} className={className} onMouseDown={(e) => this.onMouseDown(e)}>
         {children({offsetX, offsetY, zoom, volatile: panning})}
         {panning &&
           createPortal(
@@ -59,12 +57,13 @@ export class PanZoom extends Component<Props, State> {
   }
 
   override componentDidMount(): void {
-    this.resizeObserver.observe(this.rootElement.current);
+    this.resizeObserver.observe(this.rootElement.current!);
   }
 
-  private onMouseDown(e: MouseEvent) {
+  private onMouseDown(e: React.MouseEvent) {
     e.preventDefault(); // prevent text selection while dragging
-    this.setState({lastX: e.x, lastY: e.y, panning: true});
+    const {x, y} = e.nativeEvent;
+    this.setState({lastX: x, lastY: y, panning: true});
     window.addEventListener('mousemove', this.mouseMoveListener);
     window.addEventListener('mouseup', this.mouseUpListener);
   }
