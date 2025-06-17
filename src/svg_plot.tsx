@@ -31,9 +31,18 @@ interface Props {
   className?: string;
 }
 
-export class SvgPlot extends Component<Props> {
+interface State {
+  mounted: boolean;
+}
+
+export class SvgPlot extends Component<Props, State> {
   private svgRef = createRef<SVGSVGElement>();
   private computedDomain: Rect = new DOMRect();
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {mounted: false};
+  }
 
   private domain(): Rect {
     const el = this.svgRef.current;
@@ -78,7 +87,7 @@ export class SvgPlot extends Component<Props> {
   }
 
   override componentDidMount(): void {
-    this.forceUpdate();
+    this.setState({mounted: true});
   }
 }
 
