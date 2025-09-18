@@ -1,5 +1,5 @@
 import {Plot, runsToSvg, squaresToSvg} from 'contour-plot-svg';
-import type {ComputeStats, Rect} from 'contour-plot-svg';
+import type {AffineTransform, ComputeStats, Rect} from 'contour-plot-svg';
 import {Component, createRef} from 'react';
 
 import type {Function2D} from './functions';
@@ -67,13 +67,25 @@ export class SvgPlot extends Component<Props, State> {
     if (!props.volatile) {
       this.computedDomain = domain;
     }
+
+    // Transformation from the domain to the view coordinates before the user
+    // started panning or zooming.
+    const computedDomainToViewTransform = new DOMMatrix()
+      .scaleSelf(this.props.zoom)
+      .translateSelf(-this.computedDomain.x, -this.computedDomain.y);
+
+    // Result of the ongoing panning and zooming.
+    const dx = (this.computedDomain.x - domain.x) * this.props.zoom;
+    const dy = (this.computedDomain.y - domain.y) * this.props.zoom;
+
     return (
       <svg ref={this.svgRef} className={props.className}>
         {domain.width > 0 && (
-          <g transform={`scale(${props.zoom}) translate(${-domain.x}, ${-domain.y})`}>
+          <g transform={`translate(${dx} ${dy})`}>
             <SvgPlotContent
               func={props.config.func}
               domain={this.computedDomain}
+              domainToViewTransform={computedDomainToViewTransform}
               sampleSpacing={props.config.sampleSpacing}
               pixelSize={this.domainPixelSize()}
               addStyles={props.config.addStyles}
@@ -94,6 +106,7 @@ export class SvgPlot extends Component<Props, State> {
 interface ContentProps<T = unknown> {
   func: (x: number, y: number) => T;
   domain: Rect;
+  domainToViewTransform: AffineTransform;
   sampleSpacing: number;
   pixelSize: number;
   showEdges: boolean;
@@ -143,6 +156,7 @@ class SvgPlotContent extends Component<ContentProps> {
 
   private updateView() {
     const {addStyles, onUpdate} = this.props;
+    const transform = this.props.domainToViewTransform;
     const buildSvgStartMs = Date.now();
     let svgElements: SVGGraphicsElement[];
     let squareCount = 0;
@@ -152,12 +166,12 @@ class SvgPlotContent extends Component<ContentProps> {
       const squares = this.plot.squares();
       drawStartMs = Date.now();
       squareCount = squares.length;
-      svgElements = squaresToSvg(squares, addStyles, {edges: true});
+      svgElements = squaresToSvg(squares, addStyles, {transform, edges: true});
     } else {
       const runs = this.plot.runs();
       drawStartMs = Date.now();
       runCount = runs.length;
-      svgElements = runsToSvg(runs, addStyles);
+      svgElements = runsToSvg(runs, addStyles, {transform});
     }
 
     const content = this.rootRef.current!;
