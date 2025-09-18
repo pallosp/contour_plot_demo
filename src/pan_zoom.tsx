@@ -2,15 +2,17 @@ import {Component, createRef} from 'react';
 import type {ReactNode} from 'react';
 import {createPortal} from 'react-dom';
 
+export interface PanZoomChildProps {
+  offsetX: number;
+  offsetY: number;
+  zoom: number;
+  volatile: boolean;
+}
+
 interface Props {
   initialZoom: number;
   className?: string;
-  children: (state: {
-    offsetX: number;
-    offsetY: number;
-    zoom: number;
-    volatile: boolean;
-  }) => ReactNode;
+  children: (props: PanZoomChildProps) => ReactNode;
 }
 
 interface State {
@@ -22,6 +24,7 @@ interface State {
   panning: boolean;
 }
 
+/** Adds panning and zooming behavior to its child component. */
 export class PanZoom extends Component<Props, State> {
   private readonly rootElement = createRef<HTMLDivElement>();
   private resizeObserver = new ResizeObserver(() => this.onResize());
@@ -44,9 +47,11 @@ export class PanZoom extends Component<Props, State> {
   override render() {
     const {className, children} = this.props;
     const {offsetX, offsetY, zoom, panning} = this.state;
+    const childProps: PanZoomChildProps = {offsetX, offsetY, zoom, volatile: panning};
+
     return (
       <div ref={this.rootElement} className={className} onMouseDown={(e) => this.onMouseDown(e)}>
-        {children({offsetX, offsetY, zoom, volatile: panning})}
+        {children(childProps)}
         {panning &&
           createPortal(
             <div style={{position: 'absolute', width: '100vw', height: '100vh', cursor: 'grab'}} />,

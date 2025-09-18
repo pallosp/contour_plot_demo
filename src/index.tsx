@@ -4,7 +4,7 @@ import {createRoot} from 'react-dom/client';
 import {BrowserRouter, Route, Routes, useNavigate, useParams} from 'react-router-dom';
 
 import {FunctionButton, PixelSizeInput, ShowEdgesCheckbox} from './controls';
-import {PanZoom} from './pan_zoom';
+import {PanZoom, type PanZoomChildProps} from './pan_zoom';
 import {circlePlot, linePlot, mandelbrotPlot, sinCosPlot} from './plot_configs';
 import {PlotStats} from './plot_stats';
 import {SvgPlot} from './svg_plot';
@@ -63,7 +63,7 @@ export function Page(props: {plotIndex: number}) {
           initialZoom={plotConfig.initialZoom}
           key={plotConfig.initialZoom}
         >
-          {({offsetX, offsetY, zoom, volatile}) => (
+          {({offsetX, offsetY, zoom, volatile}: PanZoomChildProps) => (
             <SvgPlot
               offsetX={offsetX}
               offsetY={offsetY}
